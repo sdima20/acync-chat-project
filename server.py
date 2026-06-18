@@ -17,6 +17,22 @@ async def handle_client(reader, writer):
 
     print("User connected:", username)
 
+    #persistent connection
+    while True:
+        
+        print("Waiting...")
+
+        data = await reader.read(BUFFER_SIZE)
+        
+        if not data:
+            break
+
+        message = data.decode(ENCODING)
+
+        print(f"{username} : {message}")
+    
+    print("Connection closed")
+
     writer.close()
 
     await writer.wait_closed()

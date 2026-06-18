@@ -22,7 +22,20 @@ async def main():
 
     await writer.drain() ##!!!!!
 
-    print("Message sent")
+    #Send multiply messages
+
+    while True:
+
+        message = input("> ")
+
+        if message == 'exit':
+            break
+
+        writer.write(message.encode(ENCODING))
+
+        await writer.drain()
+    
+    writer.close()
 
     await writer.wait_closed()
 
