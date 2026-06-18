@@ -2,7 +2,7 @@ import asyncio
 
 from config import HOST, PORT, BUFFER_SIZE, ENCODING
 
-from utils import format_message
+from utils import format_message, system_message
 
 clients = {}
 
@@ -28,6 +28,12 @@ async def handle_client(reader, writer):
     username = username_data.decode(ENCODING)
 
     clients[writer] = username
+
+    await broadcast(
+        system_message(
+            f"{username} joined chat"
+        )
+    )
 
     print("Connected users: ", clients)
 
