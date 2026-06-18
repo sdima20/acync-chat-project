@@ -36,28 +36,36 @@ async def handle_client(reader, writer):
     )
 
     print("Connected users: ", clients)
-
+    try:
     #persistent connection
-    while True:
+        while True:
 
-        data = await reader.read(BUFFER_SIZE)
+            data = await reader.read(BUFFER_SIZE)
 
-        if not data:
-            break
+            if not data:
+                break
 
-        text = data.decode(ENCODING)
+            text = data.decode(ENCODING)
 
-        message = format_message(username, text)
+            message = format_message(username, text)
 
-        await broadcast(message)
+            await broadcast(message)
     
-    del clients[writer]
+    finally:
+    
+        del clients[writer]
 
-    print("Connected users: ", clients)
+        await broadcast(
+            system_message(
+                f"{username} left chat"
+            )
+        )
 
-    writer.close()
+    #print("Connected users: ", clients)
 
-    await writer.wait_closed()
+        writer.close()
+
+        await writer.wait_closed()
 
 
 async def main():
