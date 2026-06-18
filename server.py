@@ -9,11 +9,13 @@ async def handle_client(reader, writer):
 
     print("Client connected")
 
-    data = await reader.read(BUFFER_SIZE)
+    #first message contains username
 
-    message = data.decode(ENCODING)
+    username_data = await reader.read(BUFFER_SIZE)
 
-    print("Received message:", message)
+    username = username_data.decode(ENCODING)
+
+    print("User connected:", username)
 
     writer.close()
 

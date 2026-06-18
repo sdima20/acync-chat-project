@@ -14,13 +14,13 @@ async def main():
 
     print("Connected to server")
 
-    message = "Hello server!!"
+    username = input("Enter your username: ")
 
     writer.write(
-        message.encode(ENCODING)
+        username.encode(ENCODING)
     )
 
-    writer.drain()
+    await writer.drain() ##!!!!!
 
     print("Message sent")
 
