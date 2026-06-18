@@ -4,6 +4,14 @@ from config import HOST, PORT, BUFFER_SIZE, ENCODING
 
 clients = {}
 
+async def broadcast(message):
+
+    for writer in clients:
+
+        writer.write(message.encode(ENCODING))
+
+        await writer.drain()
+
 async def handle_client(reader, writer):
     """
     Handles one connected client
@@ -32,6 +40,8 @@ async def handle_client(reader, writer):
         message = data.decode(ENCODING)
 
         print(f"{username} : {message}")
+
+        await broadcast(message)
     
     del clients[writer]
 
