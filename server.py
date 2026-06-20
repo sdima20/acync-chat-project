@@ -8,11 +8,21 @@ clients = {}
 
 async def broadcast(message):
 
+    disconnected = [] #!!!!
+
     for writer in clients:
 
-        writer.write(message.encode(ENCODING))
+        try: #!!!
 
-        await writer.drain()
+            writer.write(message.encode(ENCODING))
+
+            await writer.drain()
+        
+        except ConnectionResetError: #!!!!!
+            disconnected.append(writer)
+    
+    for writer in disconnected: #!!!!!!!
+        clients.pop(writer, None)
 
 async def handle_client(reader, writer):
     """
